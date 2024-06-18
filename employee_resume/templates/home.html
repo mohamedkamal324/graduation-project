@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+{% load bootstrap5 %}
+
+{% block title %}Home{% endblock title %}
+{% block content %}
+
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Roboto:wght@700&display=swap">
+<section class="hero-section d-flex justify-content-center align-items-center" id="section_1">
+    <div class="container">
+        <div class="row">
+
+            <div class="col-lg-8 col-12 mx-auto">
+                <style>
+                    .logo-container {
+                        font-family: 'Roboto', sans-serif;
+                    }
+                    
+                    .animated-text {
+                        font-size: 4rem;
+                        font-weight: bold;
+                        color: #fff;
+                        animation: fadeInOut 3s infinite;
+                    }
+                    
+                    @keyframes fadeInOut {
+                        0% { opacity: 0; }
+                        50% { opacity: 1; }
+                        100% { opacity: 0; }
+                    }
+                </style>
+                <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                        const textElement = document.getElementById("animated-text");
+                        const text = "HireLens";
+                        let index = 0;
+                    
+                        function typeWriter() {
+                            if (index < text.length) {
+                                textElement.innerHTML += text.charAt(index);
+                                index++;
+                                setTimeout(typeWriter, 200);
+                            } else {
+                                setTimeout(() => {
+                                    textElement.innerHTML = "";
+                                    index = 0;
+                                    typeWriter();
+                                }, 2000);
+                            }
+                        }
+                    
+                        typeWriter();
+                    });
+                </script>
+                <div class="logo-container text-center mb-4">
+                    <h1 class="animated-text">HireLens</h1>
+                </div>
+
+                <h1 class="text-white text-center">Discover. Learn. Enjoy</h1>
+
+                <h6 class="text-center">Our plateform will help to find your aim job</h6>
+                <p class="text-light" style="text-align:justify;">
+                    The Resume Analysis Project is an advanced tool designed to help job seekers and employers optimize and evaluate resumes efficiently. Utilizing cutting-edge natural language processing (NLP) and machine learning techniques, this project aims to transform the recruitment process by providing detailed insights, recommendations, and scoring for resumes.
+                </p>
+               
+            </div>
+
+        </div>
+    </div>
+</section>
+
+
+<section class="explore-section" id="section_02" style="margin:100px 0;">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-10 mx-auto text-center">
+                <h2 class="mb-4">Resume Analysis -- > {{current_user.username}}</h1>
+                <form method="post" class="form" enctype="multipart/form-data">
+                    {% csrf_token %}
+                    <div class="input-group" style="border-radius:25px">
+                        <input type="file" name="resume" class="form-control p-3" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload">
+                        <button class="btn text-light p-3" type="submit" style="background-color:#80D0C7" id="inputGroupFileAddon04">Analyze</button>
+                    </div>
+                </form>
+            </div>
+            
+        </div>
+        {% if is_posted == True %}
+                <div class="row mt-5">
+                    <div class="col-md-6 card py-3">
+                        <ul>
+                            <h4 class="my-3 text-muted">Personal Information</h4>
+                            <li class="mb-2"><strong>Full Name : </strong> <span>{{full_name}}</span></li> 
+                            <li class="mb-2"><strong>Email Address : </strong> <span>{{email_address}}</span></li> 
+                            <li class="mb-2"><strong>Phone Number : </strong> <span>{{phone_number}}</span></li> 
+                            
+                            <h4 class="my-3 text-muted">Work Experiences Information</h4>
+                            {% for work in work_experience %}
+                            <li class="mb-2">
+                                <strong>Job Title : </strong><span>{{work.job_title}}</span><br>
+                                <strong>Orgnization : </strong><span>{{work.organization}}</span><br>
+                                <strong>Duration : </strong><span>{{work.duration}}</span><br>
+                            </li>
+                            {% endfor %}
+
+                            <h4 class="my-3 text-muted">Education Information</h4>
+                            <li class="mb-2">
+                                <strong>Education Spcialize : </strong><span>{{education.spcialize}}</span><br>
+                                <strong>Education Orgnization : </strong><span>{{education.org}}</span><br>
+                                <strong>Duration : </strong><span>{{education.dur}}</span><br>
+                            </li>
+                            <h4 class="my-3 text-muted">Resume Prediction Information</h4>
+                            <li class="mb-2"><strong>Resume Score : </strong> <span>{{resume_score}} %</span></li>  
+                            <li class="mb-2"><strong>Resume Prediction : </strong> <span>{{prediction}}</span></li>  
+                        </ul>
+                    </div>
+                    <div class="col-md-6 card py-3" style="max-height: 880px; overflow:hidden;">
+                        <h4 class="my-3 text-muted text-center">We Recommend Some Courses For You</h4>
+                        {% for course in courses_list %}
+                        <div class="col-md-12 mx-auto" style="border-radius: 20px;z-index:0;">
+                            <div class="iframely-embed mb-5" style="width:100%;border-radius: 20px;">
+                            <div class="iframely-responsive" style="padding-bottom: 52.5%; padding-top: 120px;width:100%;border-radius: 20px;">
+                                <a href="{{course|slice:"0:-8"}}" data-iframely-url="//iframely.net/{{course|slice:"-7:"}}" style="border-radius: 20px;"></a>
+                            </div>
+                            </div>
+                            <script async src="//iframely.net/embed.js"></script>
+                        </div>
+                     {% endfor %}
+                    </div>
+                </div>
+        {% endif %}
+    </div>
+</section>
+
+{% if is_posted == True %}
+    <section class="timeline-section section-padding mt-5" id="section_3">
+        <div class="section-overlay"></div>
+
+        <div class="container">
+            <div class="row">
+
+                <div class="col-12 text-center">
+                    <h2 class="text-white mb-4">Resume Feedback</h1>
+                </div>
+
+                <div class="col-lg-10 col-12 mx-auto">
+                    <div class="timeline-container">
+                            {% if 'Awesome' in objective %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{objective}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{objective|slice:"58"}}<br>{{objective|slice:"58:"}}</p>
+                            {% endif %}
+                
+                            {% if 'Awesome' in declaration %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{declaration}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{declaration|slice:"58"}}<br>{{declaration|slice:"58:"}}</p>
+                            {% endif %}
+                            {% if 'Awesome' in hobbies %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{hobbies}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{hobbies|slice:"58"}}<br>{{hobbies|slice:"58:"}}</p>
+                            {% endif %}
+                
+                            {% if 'Awesome' in achievements %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{achievements}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{achievements|slice:"58"}}<br>{{achievements|slice:"58:"}}</p>
+                            {% endif %}
+                
+                            {% if 'Awesome' in projects %}
+                            <p class="p-3 text-light mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✔️ {{projects}}</p>
+                            {% else %}
+                            <p class="p-3 text-light  mb-3" style="cursor:pointer;font-size:20px; border-radius: 16px;opacity:0.7;height:100px auto;width:100%;word-wrap: break-word;word-break: break-all;overflow: hidden;">✖️ {{projects|slice:"58"}}<br>{{projects|slice:"58:"}}</p>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+{% endif %}
+{% endblock content %}

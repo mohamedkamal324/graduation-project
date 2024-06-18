@@ -1,0 +1,62 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}
+    Human Resourses
+{% endblock title %}
+{% block content %}
+<header class="site-header d-flex flex-column justify-content-center align-items-center">
+    <div class="container">
+        <div class="row justify-content-center align-items-center">
+            <div class="col-lg-5 col-12 mb-5">
+                <h2 class="text-white">Our Resumes Fillter</h2>
+            </div>
+
+            <div class="col-lg-5 col-12">
+                <div class="topics-detail-block bg-white shadow-lg">
+                    <img src="{% static '' %}images/topics/undraw_Remote_design_team_re_urdx.png" class="topics-detail-block-image img-fluid">
+                </div>
+            </div>
+
+        </div>
+    </div>
+</header>
+
+<section class="topics-detail-section section-padding" id="topics-detail">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-10 col-12 m-auto card p-3 text-center">
+                <div class="row mt-5" id="table_of_result">
+                    <div class="col-md-10 mx-auto card" style="border-radius:20px;">
+                        <table class="table">
+                            <thead>
+                              <tr>
+                                <th class="text-center" scope="col">SN</th>
+                                <th class="text-center" scope="col">Applicant Name</th>
+                                <th class="text-center" scope="col">Applicant Email</th>
+                                <th class="text-center" scope="col">Resume Score</th>
+                                <th class="text-center" scope="col">Prediction Job</th>
+                                <th class="text-center" scope="col">View Resume</th>
+                                <th class="text-center" scope="col">Some Actions</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                            {% for cva in resume_analysis  %}
+                              <tr>
+                                <th scope="row" class="text-center">{{forloop.counter}}</th>
+                                <td class="text-center">{{cva.name}}</td>
+                                <td class="text-center">{{cva.email}}</td>
+                                <td class="text-center">{{cva.score}} %</td>
+                                <td class="text-center">{{cva.prediction}}</td>
+                                <td class="text-center"><a href="{{ cva.resume.resume.url }}" download>Downloa</a></td>
+                                <td class="text-center"><a href="{% url "employee_resume:interview" cva.prediction %}">Go To Interview</a></td>
+                              </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+{% endblock content %}
